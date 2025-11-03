@@ -62,7 +62,7 @@ type Options = {
 ## 🪶 Example with conditional skip
 
 ```tsx
-useOnOutsideClick(ref, closeMenu, { skip: !isMenuOpen });
+useOnOutsideClick(ref, callback, { skip: boolean });
 ```
 
 ## 🧹 Cleanup

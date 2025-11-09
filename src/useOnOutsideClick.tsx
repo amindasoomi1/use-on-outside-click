@@ -10,7 +10,7 @@ type Options = {
 
 export default function useOnOutsideClick(
   elements: ElementList,
-  callback: (event: MouseEvent) => void,
+  callback: () => void,
   { skip = false }: Options = {}
 ) {
   const callbackRef = useRef(callback);
@@ -29,7 +29,7 @@ export default function useOnOutsideClick(
   useEffect(() => {
     if (skip) return;
 
-    const handler = (e: MouseEvent) => {
+    const handler = (e: MouseEvent | TouchEvent) => {
       const target = e.target as Node | null;
       if (!target) return;
 
@@ -42,11 +42,13 @@ export default function useOnOutsideClick(
       const isInside = validEls.some((el) => el.contains(target));
 
       if (validEls.length && !isInside) {
-        callbackRef.current(e);
+        callbackRef.current();
       }
     };
 
-    document.addEventListener("pointerdown", handler);
-    return () => document.removeEventListener("pointerdown", handler);
+    document.addEventListener("click", handler);
+    return () => {
+      document.removeEventListener("click", handler);
+    };
   }, [skip]);
 }
